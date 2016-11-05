@@ -2,3 +2,5 @@ Hello
 hi How are u
 
 I always spell incorrectly 'does'
+
+I always spell it as 'does'
