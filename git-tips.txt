@@ -7,3 +7,4 @@ When finishing a feature branch merge the changes back to develop.
 
 client commit A 
 client commit C
+client commit E
