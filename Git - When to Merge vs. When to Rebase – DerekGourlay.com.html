@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<!-- saved from url=(0070)https://www.derekgourlay.com/blog/git-when-to-merge-vs-when-to-rebase/ -->
+<html class="js no-touch rgba hsla textshadow opacity svg js wf-sourcecodepro-n4-active wf-sourcecodepro-n7-active wf-sourcesanspro-i2-active wf-sourcesanspro-i3-active wf-sourcesanspro-i4-active wf-sourcesanspro-i6-active wf-sourcesanspro-i7-active wf-sourcesanspro-i9-active wf-sourcesanspro-n2-active wf-sourcesanspro-n3-active wf-sourcesanspro-n4-active wf-sourcesanspro-n6-active wf-sourcesanspro-n7-active wf-sourcesanspro-n9-active wf-volkhov-i4-active wf-volkhov-i7-active wf-volkhov-n4-active wf-volkhov-n7-active wf-active" lang="en"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Git - When to Merge vs. When to Rebase – DerekGourlay.com</title>
+<meta name="description" content="Does this (messy) branch history look familiar to you?
+
+">
+<meta name="keywords" content="">
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="Git - When to Merge vs. When to Rebase">
+<meta name="twitter:description" content="Does this (messy) branch history look familiar to you?
+
+">
+<meta name="twitter:site" content="@dbgourlay">
+<meta name="twitter:creator" content="@dbgourlay">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.derekgourlay.com/images/git-bg.png">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git - When to Merge vs. When to Rebase">
+<meta property="og:description" content="Does this (messy) branch history look familiar to you?
+
+">
+<meta property="og:url" content="https://www.derekgourlay.com/blog/git-when-to-merge-vs-when-to-rebase/">
+<meta property="og:site_name" content="DerekGourlay.com">
+
+
+
+
+
+<link rel="canonical" href="https://www.derekgourlay.com/blog/git-when-to-merge-vs-when-to-rebase/">
+<link href="https://www.derekgourlay.com/feed.xml" type="application/atom+xml" rel="alternate" title="DerekGourlay.com Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="./Git - When to Merge vs. When to Rebase – DerekGourlay.com_files/main.css">
+<!-- Webfonts -->
+<link rel="stylesheet" href="./Git - When to Merge vs. When to Rebase – DerekGourlay.com_files/l" media="all"><div class="fit-vids-style" id="fit-vids-style" style="display: none;">­<style>.fluid-width-video-wrapper{width:100%;position:relative;padding:0;}.fluid-width-video-wrapper iframe,.fluid-width-video-wrapper object,.fluid-width-video-wrapper embed {position:absolute;top:0;left:0;width:100%;height:100%;}</style></div><script type="text/javascript" async="" src="./Git - When to Merge vs. When to Rebase – DerekGourlay.com_files/inpage_linkid.js.download" id="undefined"></script><script type="text/javascript" async="" src="./Git - When to Merge vs. When to Rebase – DerekGourlay.com_files/dc.js.download"></script><script src="./Git - When to Merge vs. When to Rebase – DerekGourlay.com_files/source-sans-pro-n2,i2,n3,i3,n4,i4,n6,i6,n7,i7,n9,i9"></script>
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+  <script src="https://www.derekgourlay.com/assets/js/vendor/html5shiv.min.js"></script>
+  <script src="https://www.derekgourlay.com/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="./Git - When to Merge vs. When to Rebase – DerekGourlay.com_files/modernizr-2.7.1.custom.min.js.download"></script>
+
+
+<!-- MathJax -->
+<script src="./Git - When to Merge vs. When to Rebase – DerekGourlay.com_files/MathJax.js.download"></script>
+
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://www.derekgourlay.com/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://www.derekgourlay.com/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://www.derekgourlay.com/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://www.derekgourlay.com/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://www.derekgourlay.com/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://www.derekgourlay.com/images/apple-touch-icon-144x144-precomposed.png">
+
+<style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+
+<body id="post"><div id="MathJax_Message" style="display: none;"></div>
+
+<div class="navigation-wrapper">
+	<a href="https://www.derekgourlay.com/blog/git-when-to-merge-vs-when-to-rebase/#" id="nav-toggle" aria-hidden="true"><i class="fa fa-bars"></i> Menu</a><nav role="navigation" id="site-nav" class="animated drop closed" aria-hidden="false" style="transition: max-height 200ms; position: relative;">
+	    <ul>
+      
+		    
+		    <li><a href="https://www.derekgourlay.com/">Home</a></li>
+		  
+		    
+		    <li><a href="https://www.derekgourlay.com/posts/">Posts</a></li>
+		  
+		    
+		    <li><a href="https://www.derekgourlay.com/about/">About</a></li>
+		  
+		    
+		    <li><a href="https://www.derekgourlay.com/search/">Search</a></li>
+		  
+	    </ul>
+	</nav>
+</div><!-- /.navigation-wrapper -->
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+<header class="masthead">
+	
+		<div class="wrap">
+			<a href="https://www.derekgourlay.com/" class="site-logo" rel="home" title="DerekGourlay.com"><img src="./Git - When to Merge vs. When to Rebase – DerekGourlay.com_files/site-logo2.png" width="200" height="200" alt="DerekGourlay.com logo" class="animated fadeInDown"></a>
+		</div>
+	
+</header><!-- /.masthead -->
+
+
+<div class="js-menu-screen menu-screen"></div>
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    
+      
+
+<img src="./Git - When to Merge vs. When to Rebase – DerekGourlay.com_files/git-bg.png" class="entry-feature-image" style="" srcset="/assets/resized/480/git-bg.png 480w,/assets/resized/800/git-bg.png 800w,/assets/resized/1400/git-bg.png 1400w, /images/git-bg.png 2019w">
+
+      
+    
+
+    <div class="entry-wrapper">
+      <header class="entry-header">
+        <ul class="entry-tags">
+          
+        </ul>
+        
+          <h1 class="entry-title">Git - When to Merge vs. When to Rebase</h1>
+        
+      </header>
+      <footer class="entry-meta">
+        
+        
+          <img src="./Git - When to Merge vs. When to Rebase – DerekGourlay.com_files/bio-photo-dg.jpg" class="bio-photo" alt="Derek Gourlay bio photo">
+        
+        <span class="author vcard">By <span class="fn">Derek Gourlay</span></span>
+        <span class="entry-date date published"><time datetime="2016-02-15T11:57:00-08:00"><i class="fa fa-calendar-o"></i> February 15, 2016</time></span>
+        
+        
+        
+        
+      </footer>
+      <div class="entry-content">
+        <p>Does this (messy) branch history look familiar to you?</p>
+
+<figure>
+	<img src="./Git - When to Merge vs. When to Rebase – DerekGourlay.com_files/merge_commits.png" alt="image">
+	<figcaption>Holly merge-commits batman.</figcaption>
+</figure>
+
+<p>Keeping a clean history in git comes down to knowing when to use merge vs. rebase.  Great quote describing when to use each:</p>
+
+<blockquote>
+  <p>Rebases are how changes should pass from the top of hierarchy downwards and merges are how they flow back upwards.</p>
+</blockquote>
+
+<h3 id="rule-of-thumb">Rule of thumb:</h3>
+<ul>
+  <li>When pulling changes from origin/develop onto your local develop  use rebase.</li>
+  <li>When finishing a feature branch merge the changes back to develop.</li>
+</ul>
+
+<h3 id="use--span-stylecolor-f14e32git-pull---rebasespan-when-pulling-changes-from--span-stylecolor-209098originspan">Use  <span style="color: #F14E32">git pull --rebase</span> when pulling changes from  <span style="color: #209098">origin</span></h3>
+
+<h3 id="difference-between-span-stylecolor-f14e32git-pullspan--span-stylecolor-f14e32git-pull---rebasespan">Difference between <span style="color: #F14E32">git pull</span> &amp; <span style="color: #F14E32">git pull --rebase</span>:</h3>
+<p><strong>Situation #1:</strong> You haven’t made any changes to your local <span style="color: #209098">develop</span> branch and you want to pull changes from <span style="color: #209098">origin/develop</span>.</p>
+
+<p>In this case, <span style="color: #F14E32">git pull</span> and <span style="color: #F14E32">git pull --rebase</span> will produce the same results.  No problems.</p>
+
+<p><strong>Situation #2:</strong> You’ve got one or two small changes of your own on your local develop branch that have not yet been pushed.  You want to pull any changes you are missing from  <span style="color: #209098">origin/develop</span> to your local  <span style="color: #209098">develop</span> before you can push.</p>
+
+<figure class="highlight"><pre><code class="language-none" data-lang="none">                     origin/develop
+                       |
+         +−−−− (E)−−−−(F)
+        /                 
+(A) −− (B)−−−−−−− (C) −− (D)  
+                          |          
+                        develop</code></pre></figure>
+
+<p>A regular <span style="color: #F14E32">git pull</span> will often result in the following:</p>
+
+<figure class="highlight"><pre><code class="language-none" data-lang="none">                 origin/develop
+                       |        
+         +−−−− (E)−−−−(F)−−−−−−−−−−−−−−−−
+        /                                \
+(A) −− (B) −−−−−−−−(C) −− (D)−−−−(G − merge commit)  
+                                          |          
+                                        develop </code></pre></figure>
+
+<p>Unfortunately you no longer have a linear commit history.  And after pushing your git history looks like:</p>
+
+<figure class="highlight"><pre><code class="language-none" data-lang="none">         +−−−− (E)−−−−(F)−−−−−−−−−−−−−−−−
+        /                                \
+(A) −− (B) −−−−−−−−(C) −− (D)−−−−(G − merge commit)  
+                                          |          
+                                        develop 
+                                          |
+                                   origin/develop</code></pre></figure>
+
+<p><strong>Instead</strong> use git <span style="color: #F14E32">pull –rebase</span>:</p>
+
+<figure class="highlight"><pre><code class="language-none" data-lang="none">(A) −− (B)−−−−−−− (E) −− (F) −−−−−−− (C') −− (D') 
+                          |                   |
+                    origin/develop         develop</code></pre></figure>
+
+<p>During the rebase your local commits C &amp; D are played in order on top of the changes you pulled from <span style="color: #209098">origin/develop</span>. These commits are replaced with C’ &amp; D’ as you solve local conflicts one commit at a time when they are replayed.
+Now pushing to <span style="color: #209098">origin/develop</span> results in a fast-forward and a nice clean git history:</p>
+
+<figure class="highlight"><pre><code class="language-none" data-lang="none">(A) −− (B)−−−−−−− (E) −− (F) −−−−−−− (C') −− (D') 
+                                              |
+                                           develop  
+                                              |
+                                        origin/develop</code></pre></figure>
+
+<p>Use <span style="color: #F14E32">git merge</span>  when finishing off a <span style="color: #209098">feature</span> branch.</p>
+
+<p>Example of merging a <span style="color: #209098">feature</span> branch back into <span style="color: #209098">develop</span> before pushing:</p>
+
+<figure class="highlight"><pre><code class="language-none" data-lang="none">                 origin/develop                       develop
+                       |                                 |        
+         +−−−− (C)−−−−(D)−−−−−−−−−−−(H − Merging completed Feature for TMS−123)−−−−−
+        /                           /      
+(A) −− (B) −−−−−−−−(E) −− (F)−−−−(G)  
+                                  |          
+                         feature/TMS−123/myCoolFeature</code></pre></figure>
+
+<p>After pushing to <span style="color: #209098">origin</span>:</p>
+
+<figure class="highlight"><pre><code class="language-none" data-lang="none">                                                   origin/develop 
+                                                          |
+                                                       develop
+                                                         |        
+         +−−−− (C)−−−−(D)−−−−−−−−−−−(H − Merging completed Feature for TMS−123)−−−−−
+        /                           /      
+(A) −− (B) −−−−−−−−(E) −− (F)−−−−(G)  
+                                  |          
+                         feature/TMS−123/myCoolFeature</code></pre></figure>
+
+<h3 id="hold-on-span-stylecolor-f14e32git-pull---rebasespan-isnt-all-gravy">Hold on, <span style="color: #F14E32">git pull --rebase</span> isn’t all gravy!</h3>
+
+<p>While it is possible to set your system to default to <span style="color: #F14E32">git pull --rebase</span> over using the regular <span style="color: #F14E32">git pull</span> you will occasionally find you run into problems such as the following scenario:</p>
+
+<p>You slave away working on a local feature branch and finish it off by merging it back into <span style="color: #209098">develop</span> (using the <span style="color: #F14E32">--no-ff</span> flag of course) resulting in the same history as the previous example:</p>
+
+<figure class="highlight"><pre><code class="language-none" data-lang="none">                                                   origin/develop 
+                                                         |
+                                                       develop
+                                                         |        
+         +−−−− (C)−−−−(D)−−−−−−−−−−−(H − Merging completed Feature for TMS−123)−−−−−
+        /                           /      
+(A) −− (B) −−−−−−−−(E) −− (F)−−−−(G)  
+                                  |          
+                         feature/TMS−123/myCoolFeature</code></pre></figure>
+
+<p>However after running <span style="color: #F14E32">git fetch</span> you notice that <span style="color: #209098">origin/develop</span> is 2 commits of head of <span style="color: #209098">develop</span>:</p>
+
+<figure class="highlight"><pre><code class="language-none" data-lang="none">                                                       develop                        origin/develop
+                                                         |                                  |
+         +−−−− (C)−−−−(D)−−−−−−−−−−−(H − Merging completed Feature for TMS−123)−−−−−(I)−−−−(J)
+        /                           /      
+(A) −− (B) −−−−−−−−(E)−−−−(F)−−−−(G)  
+                                  |          
+                         feature/TMS−123/myCoolFeature</code></pre></figure>
+
+<p>You run <span style="color: #F14E32">git pull –rebase</span> as told and all of a sudden something strange has happened:</p>
+
+<figure class="highlight"><pre><code class="language-none" data-lang="none">(A) −− (B) −−−−−−(C)−−−(D)−−−−(I)−−−−(J)−−−−(E')−−−−−(F')−−−−−(G')−−−−  
+        \                             |                        |         
+         \                      origin/develop             develop
+          \
+            −−−−−−−−(E)−−−−(F)−−−−(G) 
+                                   |          
+                          feature/TMS−123/myCoolFeature</code></pre></figure>
+
+<p>Your merge commit has disappeared!</p>
+
+<p>What we really wanted was:</p>
+
+<figure class="highlight"><pre><code class="language-none" data-lang="none">                                    origin/develop                 develop  
+                                         |                           |          
+         +−−−− (C)−−−−(D)−−−−−−−(I)−−−−−(J)−−−−−−−−(H' − Merging completed Feature for TMS−123)
+        /                                                        /      
+(A) −− (B) −−−−−−−−(E)−−−−(F)−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−(G)  
+                                                                |          
+                                                 feature/TMS−123/myCoolFeature</code></pre></figure>
+
+<p>The problem is…</p>
+
+<h3 id="rebasing-deletes-merge-commits">Rebasing Deletes Merge Commits!</h3>
+<hr>
+
+<h3 id="welcome-the-span-stylecolor-f14e32--preserve-mergesspan-flag-to-center-stage">Welcome the <span style="color: #F14E32">–preserve-merges</span> flag to center stage:</h3>
+
+<p>From the git-rebase manpage:</p>
+
+<figure class="highlight"><pre><code class="language-none" data-lang="none">−p, −−preserve−merges
+           Instead of ignoring merges, try to recreate them.
+           This uses the −−interactive machinery internally, 
+           but combining it with the −−interactive option explicitly 
+           is generally not a good idea unless you know what you are 
+           doing (see BUGS below).</code></pre></figure>
+
+<p>So, instead of using <span style="color: #F14E32">git pull –rebase</span>, use:</p>
+
+<h3 id="span-stylecolor-f14e32git-fetchspan-span-stylecolor-209098originspan-and-span-stylecolor-f14e32git-rebase--pspan-span-stylecolor-209098origindevelopspan"><span style="color: #F14E32">git fetch</span> <span style="color: #209098">origin</span> and <span style="color: #F14E32">git rebase -p</span> <span style="color: #209098">origin/develop</span></h3>
+
+<hr>
+
+<p>Downsides to git <span style="color: #F14E32">rebase -p</span>:</p>
+
+<p><strong>Git pull is dead!</strong></p>
+
+<p>Unfortunately the <span style="color: #F14E32">-p</span> flag cannot be used in conjunction with <span style="color: #F14E32">git pull</span> ( <span style="color: red">git pull –rebase -p</span> doesn’t work!) and as a result you have to explicitly fetch &amp; rebase changes from <span style="color: #209098">origin</span>.</p>
+
+<p><strong>ORIG_HEAD is no longer preserved</strong></p>
+
+<figure class="half">
+	<img src="./Git - When to Merge vs. When to Rebase – DerekGourlay.com_files/finn_upset.png" alt="image">
+</figure>
+
+<p><span style="color: #209098">ORIG_HEAD</span> can be quite handy for multiple scenarios (If you want to review all changes you’ve just merged: <span style="color: #F14E32">git log -p –reverse</span> <span style="color: #209098">ORIG_HEAD</span>).  Unfortunately, git <span style="color: #F14E32">rebase -p</span> sets <span style="color: #209098">ORIG_HEAD</span> for each commit being rebased.</p>
+
+<p>(Check out <a href="https://plus.google.com/111049168280159033135/posts/Xmycxn7VwHV">this google+ conversation</a> for more tips RE: how to use <span style="color: #209098">ORIG_HEAD</span>)</p>
+
+<p><strong>Branch tracking is not used</strong></p>
+
+<p>Unlike <span style="color: #F14E32">git pull –rebase</span>, which will fetch changes from the branch your current branch is tracking, <span style="color: #F14E32">git rebase -p</span> doesn’t have a sensible default to work from. You have to give it a branch to rebase from (which is why we specify <span style="color: #209098">origin/develop</span> in the above example).</p>
+<hr>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>To avoid messy merge commits and help keep a relatively clean git commit history use the following workflow when fetching upstream changes:</p>
+
+<h3 id="span-stylecolor-f14e32git-fetchspan-span-stylecolor-209098originspan"><span style="color: #F14E32">git fetch</span> <span style="color: #209098">origin</span></h3>
+
+<h3 id="span-stylecolor-f14e32git-rebase-pspan-span-stylecolor-209098origindevelopspan"><span style="color: #F14E32">git rebase −p</span> <span style="color: #209098">origin/develop</span></h3>
+
+<p>For further reading about the inner workings of Git, I found the Git Internals section of the <a href="http://www.amazon.com/Pro-Git-Scott-Chacon/dp/1484200772">Pro Git</a> book very helpful!</p>
+
+
+        
+      </div><!-- /.entry-content -->
+    </div><!-- /.entry-wrapper -->
+    <nav class="pagination" role="navigation">
+      
+      
+    </nav><!-- /.pagination -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo" class="entry-wrapper">
+    
+
+<span>© 2016 Derek Gourlay. Powered by <a href="http://jekyllrb.com/" rel="nofollow">Jekyll</a>.</span>
+<div class="social-icons">
+	<a href="https://twitter.com/dbgourlay" title="Derek Gourlay on Twitter" target="_blank"><i class="fa fa-twitter-square fa-2x"></i></a>
+	
+	<a href="https://plus.google.com/+DerekGourlay" title="Derek Gourlay on Google+" target="_blank"><i class="fa fa-google-plus-square fa-2x"></i></a>
+	<a href="https://linkedin.com/in/derekgourlay" title="Derek Gourlay on LinkedIn" target="_blank"><i class="fa fa-linkedin-square fa-2x"></i></a>
+	
+	
+	
+	
+	
+  
+	
+  <a href="https://www.derekgourlay.com/feed.xml" title="Atom/RSS feed"><i class="fa fa-rss-square fa-2x"></i></a>
+</div><!-- /.social-icons -->
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script type="text/javascript">
+  var BASE_URL = 'https://www.derekgourlay.com';
+</script>
+
+<script src="./Git - When to Merge vs. When to Rebase – DerekGourlay.com_files/jquery.min.js.download"></script>
+<script>window.jQuery || document.write('<script src="https://www.derekgourlay.com/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="./Git - When to Merge vs. When to Rebase – DerekGourlay.com_files/scripts.min.js.download"></script>
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  var _gaq = _gaq || [];
+  var pluginUrl =
+ 'https://www.google-analytics.com/plugins/ga/inpage_linkid.js';
+  _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+  _gaq.push(['_setAccount', 'UA-37929062-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = 'https://stats.g.doubleclick.net/dc.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+
+</body></html>
