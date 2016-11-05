@@ -1,6 +1,8 @@
 first line
 second line
 third line
+line 4
 first lin
 first lin
-first lin
+line 5
+line 6
