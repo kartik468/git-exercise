@@ -5,4 +5,5 @@ Rule of thumb:
 When pulling changes from origin/develop onto your local develop use rebase.
 When finishing a feature branch merge the changes back to develop.
 
-commit A
+client commit A 
+client commit C
